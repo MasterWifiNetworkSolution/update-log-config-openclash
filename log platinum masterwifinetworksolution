@@ -1,0 +1,914 @@
+OpenClash 调试日志
+
+生成时间: 2021-11-02 05:22:28
+插件版本: v0.43.06-beta
+隐私提示: 上传此日志前请注意检查、屏蔽公网IP、节点、密码等相关敏感信息
+
+```
+
+#===================== 系统信息 =====================#
+
+主机型号: Amlogic Meson GXL (S905X) P212 Development Board
+固件版本: OpenWrt SNAPSHOT r0-8bb4437
+LuCI版本: git-21.180.65355-81c26a8
+内核版本: 5.4.128-flippy-61+o
+处理器架构: aarch64_cortex-a53
+
+#此项有值时,如不使用IPv6,建议到网络-接口-lan的设置中禁用IPV6的DHCP
+IPV6-DHCP: 
+
+#此项结果应仅有配置文件的DNS监听地址
+Dnsmasq转发设置: 127.0.0.1#7874
+
+#===================== 依赖检查 =====================#
+
+dnsmasq-full: 已安装
+coreutils: 已安装
+coreutils-nohup: 已安装
+bash: 已安装
+curl: 已安装
+ca-certificates: 已安装
+ipset: 已安装
+ip-full: 已安装
+iptables-mod-tproxy: 已安装
+kmod-ipt-tproxy: 已安装
+iptables-mod-extra: 已安装
+kmod-ipt-extra: 已安装
+libcap: 已安装
+libcap-bin: 已安装
+ruby: 已安装
+ruby-yaml: 已安装
+ruby-psych: 已安装
+ruby-pstore: 已安装
+ruby-dbm: 已安装
+kmod-tun(TUN模式): 已安装
+luci-compat(Luci-19.07): 已安装
+
+#===================== 内核检查 =====================#
+
+运行状态: 运行中
+进程pid: 2060
+运行权限: 2060: cap_dac_override,cap_net_bind_service,cap_net_admin,cap_net_raw,cap_sys_resource=eip
+运行用户: 
+已选择的架构: linux-armv8
+
+#下方无法显示内核版本号时请确认您的内核版本是否正确或者有无权限
+Tun内核版本: 2021.09.15
+Tun内核文件: 存在
+Tun内核运行权限: 正常
+
+Game内核版本: 20210310-122-g48a4641
+Game内核文件: 存在
+Game内核运行权限: 正常
+
+Dev内核版本: v1.5.11
+Dev内核文件: 存在
+Dev内核运行权限: 正常
+
+#===================== 插件设置 =====================#
+
+当前配置文件: /etc/openclash/config/PLATINUM-masterwifinetworksolution.yaml
+启动配置文件: /etc/openclash/PLATINUM-masterwifinetworksolution.yaml
+运行模式: fake-ip-mix
+默认代理模式: script
+UDP流量转发(tproxy): 停用
+DNS劫持: 启用
+自定义DNS: 停用
+IPV6代理: 停用
+IPV6-DNS解析: 停用
+禁用Dnsmasq缓存: 停用
+自定义规则: 停用
+仅允许内网: 停用
+仅代理命中规则流量: 停用
+仅允许常用端口流量: 停用
+绕过中国大陆IP: 停用
+
+#启动异常时建议关闭此项后重试
+混合节点: 停用
+保留配置: 停用
+
+#启动异常时建议关闭此项后重试
+第三方规则: 启用
+
+#===================== 配置文件 =====================#
+
+proxy-groups:
+- name: PLATINUM
+  type: select
+  proxies:
+  - All_BestPlatinum
+  - Platinum_Loadbalance
+  - Platinum_Fallback
+  - Platinum_Relay
+  - PlatinumTrojan
+  - PlatinumVmess
+  - PlatinumShadowsocksR
+  - PlatinumShadowsocks
+  - PlatinumSnell
+  - PlatinumHttp
+  - PlatinumSocks
+  - PlatinumPing_Trojan
+  - PlatinumPing_Vmess
+  - PlatinumPing_ShadowsocksR
+  - PlatinumPing_Shadowsocks
+  - PlatinumPing_Snell
+  - PlatinumPing_Http
+  - PlatinumPing_Socks
+  - PlatinumLB_Trojan
+  - PlatinumLB_Vmess
+  - PlatinumLB_ShadowsocksR
+  - PlatinumLB_Shadowsocks
+  - PlatinumLB_Snell
+  - PlatinumLB_Http
+  - PlatinumLB_Socks
+  - DIRECT
+  - REJECT
+- name: All_BestPlatinum
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumtrojan
+  - platinumvmess
+  - platinumshadowsocksr
+  - platinumshadowsocks
+  - platinumsnell
+  - platinumhttp
+  - platinumsocks
+- name: Platinum_Loadbalance
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumtrojan
+  - platinumvmess
+  - platinumshadowsocksr
+  - platinumshadowsocks
+  - platinumsnell
+  - platinumhttp
+  - platinumsocks
+- name: Platinum_Fallback
+  type: fallback
+  disable-udp: false
+  use:
+  - platinumtrojan
+  - platinumvmess
+  - platinumshadowsocksr
+  - platinumshadowsocks
+  - platinumsnell
+  - platinumhttp
+  - platinumsocks
+- name: Platinum_Relay
+  type: relay
+  disable-udp: false
+  use:
+  - platinumtrojan
+  - platinumvmess
+  - platinumshadowsocksr
+  - platinumshadowsocks
+  - platinumsnell
+  - platinumhttp
+  - platinumsocks
+- name: PlatinumTrojan
+  type: select
+  use:
+  - platinumtrojan
+- name: PlatinumVmess
+  type: select
+  use:
+  - platinumvmess
+- name: PlatinumShadowsocksR
+  type: select
+  use:
+  - platinumshadowsocksr
+- name: PlatinumShadowsocks
+  type: select
+  use:
+  - platinumshadowsocks
+- name: PlatinumSnell
+  type: select
+  use:
+  - platinumsnell
+- name: PlatinumHttp
+  type: select
+  use:
+  - platinumhttp
+- name: PlatinumSocks
+  type: select
+  use:
+  - platinumsocks
+- name: PlatinumPing_Trojan
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumtrojan
+- name: PlatinumPing_Vmess
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumvmess
+- name: PlatinumPing_ShadowsocksR
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumshadowsocksr
+- name: PlatinumPing_Shadowsocks
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumshadowsocks
+- name: PlatinumPing_Snell
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumsnell
+- name: PlatinumPing_Http
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumhttp
+- name: PlatinumPing_Socks
+  type: url-test
+  tolerance: 99
+  use:
+  - platinumsocks
+- name: PlatinumLB_Trojan
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumtrojan
+- name: PlatinumLB_Vmess
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumvmess
+- name: PlatinumLB_ShadowsocksR
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumshadowsocksr
+- name: PlatinumLB_Shadowsocks
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumshadowsocks
+- name: PlatinumLB_Snell
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumsnell
+- name: PlatinumLB_Http
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumhttp
+- name: PlatinumLB_Socks
+  type: load-balance
+  strategy: consistent-hashing
+  disable-udp: false
+  use:
+  - platinumsocks
+redir-port: 7892
+port: 7890
+socks-port: 7891
+mixed-port: 7893
+mode: script
+log-level: info
+allow-lan: true
+external-controller: 0.0.0.0:9090
+bind-address: "*"
+external-ui: "/usr/share/openclash/dashboard"
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  listen: 127.0.0.1:7874
+  default-nameserver:
+  - 114.114.114.114
+  - 119.29.29.29
+  - 8.8.8.8
+  - 8.8.4.4
+  - 1.1.1.1
+  - 1.0.0.1
+  nameserver:
+  - 114.114.114.114
+  - 119.29.29.29
+  - 8.8.8.8
+  - 8.8.4.4
+  - 1.1.1.1
+  - 1.0.0.1
+  fallback:
+  - https://cloudflare-dns.com/dns-query
+  - https://dns.google/dns-query
+  - https://1.1.1.1/dns-query
+  - tls://8.8.8.8:853
+  - tls://dns.rubyfish.cn:853
+  - https://1.1.1.1/dns-query
+  fallback-filter:
+    geoip: true
+    ipcidr:
+    - 0.0.0.0/8
+    - 10.0.0.0/8
+    - 100.64.0.0/10
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 172.16.0.0/12
+    - 192.0.0.0/24
+    - 192.0.2.0/24
+    - 192.88.99.0/24
+    - 192.168.0.0/16
+    - 198.18.0.0/15
+    - 198.51.100.0/24
+    - 203.0.113.0/24
+    - 224.0.0.0/4
+    - 240.0.0.0/4
+    - 255.255.255.255/32
+    domain:
+    - "+.google.com"
+    - "+.facebook.com"
+    - "+.youtube.com"
+    - "+.githubusercontent.com"
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - "*.lan"
+  - time.windows.com
+  - time.nist.gov
+  - time.apple.com
+  - time.asia.apple.com
+  - "*.ntp.org.cn"
+  - "*.openwrt.pool.ntp.org"
+  - time1.cloud.tencent.com
+  - time.ustc.edu.cn
+  - pool.ntp.org
+  - ntp.ubuntu.com
+  - ntp.aliyun.com
+  - ntp1.aliyun.com
+  - ntp2.aliyun.com
+  - ntp3.aliyun.com
+  - ntp4.aliyun.com
+  - ntp5.aliyun.com
+  - ntp6.aliyun.com
+  - ntp7.aliyun.com
+  - time1.aliyun.com
+  - time2.aliyun.com
+  - time3.aliyun.com
+  - time4.aliyun.com
+  - time5.aliyun.com
+  - time6.aliyun.com
+  - time7.aliyun.com
+  - "*.time.edu.cn"
+  - time1.apple.com
+  - time2.apple.com
+  - time3.apple.com
+  - time4.apple.com
+  - time5.apple.com
+  - time6.apple.com
+  - time7.apple.com
+  - time1.google.com
+  - time2.google.com
+  - time3.google.com
+  - time4.google.com
+  - music.163.com
+  - "*.music.163.com"
+  - "*.126.net"
+  - musicapi.taihe.com
+  - music.taihe.com
+  - songsearch.kugou.com
+  - trackercdn.kugou.com
+  - "*.kuwo.cn"
+  - api-jooxtt.sanook.com
+  - api.joox.com
+  - joox.com
+  - y.qq.com
+  - "*.y.qq.com"
+  - streamoc.music.tc.qq.com
+  - mobileoc.music.tc.qq.com
+  - isure.stream.qqmusic.qq.com
+  - dl.stream.qqmusic.qq.com
+  - aqqmusic.tc.qq.com
+  - amobile.music.tc.qq.com
+  - "*.xiami.com"
+  - "*.music.migu.cn"
+  - music.migu.cn
+  - "*.msftconnecttest.com"
+  - "*.msftncsi.com"
+  - localhost.ptlogin2.qq.com
+  - "+.srv.nintendo.net"
+  - "+.stun.playstation.net"
+  - xbox.*.microsoft.com
+  - "+.xboxlive.com"
+  - proxy.golang.org
+  - stun.*.*
+  - stun.*.*.*
+  - heartbeat.belkin.com
+  - "*.linksys.com"
+  - "*.linksyssmartwifi.com"
+  - "+.battlenet.com.cn"
+ipv6: false
+profile:
+  store-selected: true
+rule-providers:
+  IklanMaster:
+    type: file
+    behavior: classical
+    path: "./rule_provider/iklanmaster.yaml"
+  SosmedMaster:
+    type: file
+    behavior: classical
+    path: "./rule_provider/SosmedMaster.yaml"
+  StreamMaster:
+    type: file
+    behavior: classical
+    path: "./rule_provider/StreamMaster.yaml"
+  GameMaster:
+    type: file
+    behavior: classical
+    path: "./rule_provider/GameMaster.yaml"
+  BrowserMaster:
+    type: file
+    behavior: classical
+    path: "./rule_provider/BrowserMaster.yaml"
+  LAN:
+    type: file
+    behavior: ipcidr
+    path: "./rule_provider/LAN.yaml"
+script:
+  code: "def main(ctx, metadata):\n    ruleset_action = {\"IklanMaster\": \"REJECT\",\n
+    \       \"BrowserMaster\": \"PLATINUM\",\n        \"StreamMaster\": \"PLATINUM\",\n
+    \       \"SosmedMaster\": \"PLATINUM\",\n        \"GameMaster\": \"PLATINUMGAMER\",\n
+    \       \"LAN\": \"DIRECT\"\n      }\n\n    port = int(metadata[\"dst_port\"])\n\n
+    \   if metadata[\"network\"] == \"UDP\":\n        if port == [443, 3478, 4244,
+    5222, 5223, 5228, 5288, 5242, 5349, 34784, 45395, 50318, 59234]:\n            ctx.log('[Script]
+    matched QUIC traffic use platinum')\n            return \"PLATINUM\"\n\n    port_list
+    = [21, 22, 23, 53, 80, 123, 143, 194, 443, 465, 587, 853, 993, 995, 998, 2052,
+    2053, 2082, 2083, 2086, 2095, 2096, 3478, 4244, 5222, 5223, 5228, 5229, 5230,
+    5242, 5288, 5349, 8080, 8443, 8880, 8888, 8889, 34784, 45395, 50318, 59234]\n
+    \   if port not in port_list:\n        ctx.log('[Script] not common port use platinum')\n
+    \       return \"PLATINUM\"\n\n        ctx.log('[Script] FINAL')\n    return \"PLATINUM\"
+    \   \n"
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+  - tcp://8.8.8.8:53
+  - tcp://8.8.4.4:53
+tproxy-port: 7895
+rules:
+- SRC-PORT,7777,DIRECT
+- IP-CIDR,127.0.0.0/8,DIRECT
+- IP-CIDR,198.18.0.1/16,REJECT,no-resolve
+- RULE-SET,LAN,DIRECT
+- RULE-SET,IklanMaster,REJECT
+- RULE-SET,BrowserMaster,PLATINUM
+- RULE-SET,SosmedMaster,PLATINUM
+- RULE-SET,GameMaster,PLATINUM
+- RULE-SET,StreamMaster,PLATINUM
+- MATCH,PLATINUM
+
+#===================== 防火墙设置 =====================#
+
+#IPv4 NAT chain
+
+# Generated by iptables-save v1.8.7 on Tue Nov  2 05:22:31 2021
+*nat
+:PREROUTING ACCEPT [147:75485]
+:INPUT ACCEPT [453:71524]
+:OUTPUT ACCEPT [1374:112161]
+:POSTROUTING ACCEPT [761:98655]
+:ADBYBY - [0:0]
+:openclash - [0:0]
+:openclash_output - [0:0]
+:postrouting_ipsec_rule - [0:0]
+:postrouting_lan_rule - [0:0]
+:postrouting_libernet_rule - [0:0]
+:postrouting_rule - [0:0]
+:postrouting_wan_rule - [0:0]
+:postrouting_xdermvpn_rule - [0:0]
+:prerouting_ipsec_rule - [0:0]
+:prerouting_lan_rule - [0:0]
+:prerouting_libernet_rule - [0:0]
+:prerouting_rule - [0:0]
+:prerouting_wan_rule - [0:0]
+:prerouting_xdermvpn_rule - [0:0]
+:zone_ipsec_postrouting - [0:0]
+:zone_ipsec_prerouting - [0:0]
+:zone_lan_postrouting - [0:0]
+:zone_lan_prerouting - [0:0]
+:zone_libernet_postrouting - [0:0]
+:zone_libernet_prerouting - [0:0]
+:zone_wan_postrouting - [0:0]
+:zone_wan_prerouting - [0:0]
+:zone_xdermvpn_postrouting - [0:0]
+:zone_xdermvpn_prerouting - [0:0]
+-A PREROUTING -d 8.8.4.4/32 -p tcp -m comment --comment "OpenClash Google DNS Hijack" -m tcp --dport 53 -j ACCEPT
+-A PREROUTING -d 8.8.8.8/32 -p tcp -m comment --comment "OpenClash Google DNS Hijack" -m tcp --dport 53 -j ACCEPT
+-A PREROUTING -p tcp -m tcp --dport 53 -m comment --comment "DNS Hijack" -j REDIRECT --to-ports 53
+-A PREROUTING -p udp -m udp --dport 53 -m comment --comment "DNS Hijack" -j REDIRECT --to-ports 53
+-A PREROUTING -p tcp -m tcp --dport 80 -j ADBYBY
+-A PREROUTING -m comment --comment "!fw3: Custom prerouting rule chain" -j prerouting_rule
+-A PREROUTING -i br-lan -m comment --comment "!fw3" -j zone_lan_prerouting
+-A PREROUTING -i wwan0 -m comment --comment "!fw3" -j zone_wan_prerouting
+-A PREROUTING -i usb0 -m comment --comment "!fw3" -j zone_wan_prerouting
+-A PREROUTING -i eth2 -m comment --comment "!fw3" -j zone_wan_prerouting
+-A PREROUTING -i eth1 -m comment --comment "!fw3" -j zone_wan_prerouting
+-A PREROUTING -i usbnet0 -m comment --comment "!fw3" -j zone_wan_prerouting
+-A PREROUTING -i tun1 -m comment --comment "!fw3" -j zone_libernet_prerouting
+-A PREROUTING -i tun0 -m comment --comment "!fw3" -j zone_xdermvpn_prerouting
+-A PREROUTING -i tap0 -m comment --comment "!fw3" -j zone_xdermvpn_prerouting
+-A PREROUTING -p tcp -j openclash
+-A OUTPUT -j openclash_output
+-A POSTROUTING -m comment --comment "!fw3: Custom postrouting rule chain" -j postrouting_rule
+-A POSTROUTING -o br-lan -m comment --comment "!fw3" -j zone_lan_postrouting
+-A POSTROUTING -o wwan0 -m comment --comment "!fw3" -j zone_wan_postrouting
+-A POSTROUTING -o usb0 -m comment --comment "!fw3" -j zone_wan_postrouting
+-A POSTROUTING -o eth2 -m comment --comment "!fw3" -j zone_wan_postrouting
+-A POSTROUTING -o eth1 -m comment --comment "!fw3" -j zone_wan_postrouting
+-A POSTROUTING -o usbnet0 -m comment --comment "!fw3" -j zone_wan_postrouting
+-A POSTROUTING -o tun1 -m comment --comment "!fw3" -j zone_libernet_postrouting
+-A POSTROUTING -o tun0 -m comment --comment "!fw3" -j zone_xdermvpn_postrouting
+-A POSTROUTING -o tap0 -m comment --comment "!fw3" -j zone_xdermvpn_postrouting
+-A ADBYBY -d 0.0.0.0/8 -j RETURN
+-A ADBYBY -d 10.0.0.0/8 -j RETURN
+-A ADBYBY -d 127.0.0.0/8 -j RETURN
+-A ADBYBY -d 169.254.0.0/16 -j RETURN
+-A ADBYBY -d 172.16.0.0/12 -j RETURN
+-A ADBYBY -d 192.168.0.0/16 -j RETURN
+-A ADBYBY -d 224.0.0.0/4 -j RETURN
+-A ADBYBY -d 240.0.0.0/4 -j RETURN
+-A ADBYBY -m set --match-set adbyby_esc dst -j RETURN
+-A ADBYBY -m set ! --match-set adbyby_wan dst -j RETURN
+-A ADBYBY -p tcp -j REDIRECT --to-ports 8118
+-A openclash -m set --match-set localnetwork dst -j RETURN
+-A openclash -p tcp -j REDIRECT --to-ports 7892
+-A openclash_output -m set --match-set localnetwork dst -j RETURN
+-A openclash_output -d 198.18.0.0/16 -p tcp -m owner ! --uid-owner 65534 -j REDIRECT --to-ports 7892
+-A openclash_output -p tcp -m owner ! --uid-owner 65534 -j REDIRECT --to-ports 7892
+-A zone_ipsec_postrouting -m comment --comment "!fw3: Custom ipsec postrouting rule chain" -j postrouting_ipsec_rule
+-A zone_ipsec_postrouting -m comment --comment "!fw3" -j MASQUERADE
+-A zone_ipsec_prerouting -m comment --comment "!fw3: Custom ipsec prerouting rule chain" -j prerouting_ipsec_rule
+-A zone_lan_postrouting -m comment --comment "!fw3: Custom lan postrouting rule chain" -j postrouting_lan_rule
+-A zone_lan_prerouting -m comment --comment "!fw3: Custom lan prerouting rule chain" -j prerouting_lan_rule
+-A zone_libernet_postrouting -m comment --comment "!fw3: Custom libernet postrouting rule chain" -j postrouting_libernet_rule
+-A zone_libernet_postrouting -m comment --comment "!fw3" -j MASQUERADE
+-A zone_libernet_prerouting -m comment --comment "!fw3: Custom libernet prerouting rule chain" -j prerouting_libernet_rule
+-A zone_wan_postrouting -m comment --comment "!fw3: Custom wan postrouting rule chain" -j postrouting_wan_rule
+-A zone_wan_postrouting -m comment --comment "!fw3" -j MASQUERADE
+-A zone_wan_prerouting -m comment --comment "!fw3: Custom wan prerouting rule chain" -j prerouting_wan_rule
+-A zone_xdermvpn_postrouting -m comment --comment "!fw3: Custom xdermvpn postrouting rule chain" -j postrouting_xdermvpn_rule
+-A zone_xdermvpn_postrouting -m comment --comment "!fw3" -j MASQUERADE
+-A zone_xdermvpn_prerouting -m comment --comment "!fw3: Custom xdermvpn prerouting rule chain" -j prerouting_xdermvpn_rule
+COMMIT
+# Completed on Tue Nov  2 05:22:31 2021
+
+#IPv4 Mangle chain
+
+# Generated by iptables-save v1.8.7 on Tue Nov  2 05:22:31 2021
+*mangle
+:PREROUTING ACCEPT [210:61967]
+:INPUT ACCEPT [201:55229]
+:FORWARD ACCEPT [9:6738]
+:OUTPUT ACCEPT [158:96811]
+:POSTROUTING ACCEPT [167:103549]
+:RRDIPT_FORWARD - [0:0]
+:RRDIPT_INPUT - [0:0]
+:RRDIPT_OUTPUT - [0:0]
+:mwan3_connected - [0:0]
+:mwan3_hook - [0:0]
+:mwan3_ifaces_in - [0:0]
+:mwan3_policy_balanced - [0:0]
+:mwan3_rules - [0:0]
+:openclash - [0:0]
+:openclash_dns_hijack - [0:0]
+:openclash_output - [0:0]
+-A PREROUTING -p udp -j openclash
+-A PREROUTING -p tcp -m tcp --dport 53 -j openclash_dns_hijack
+-A PREROUTING -j mwan3_hook
+-A INPUT -j RRDIPT_INPUT
+-A FORWARD -j RRDIPT_FORWARD
+-A FORWARD -o wwan0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i wwan0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o usb0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i usb0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o eth2 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i eth2 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o eth1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i eth1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o usbnet0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i usbnet0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tun1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone libernet MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tun1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone libernet MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tun0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tun0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tap0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tap0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A OUTPUT -j openclash_output
+-A OUTPUT -j RRDIPT_OUTPUT
+-A OUTPUT -j mwan3_hook
+-A RRDIPT_FORWARD -s 192.168.1.101/32 -j RETURN
+-A RRDIPT_FORWARD -d 192.168.1.101/32 -j RETURN
+-A RRDIPT_FORWARD -s 192.168.1.4/32 -j RETURN
+-A RRDIPT_FORWARD -d 192.168.1.4/32 -j RETURN
+-A RRDIPT_FORWARD -s 192.168.1.11/32 -j RETURN
+-A RRDIPT_FORWARD -d 192.168.1.11/32 -j RETURN
+-A RRDIPT_INPUT -i eth0 -j RETURN
+-A RRDIPT_INPUT -i br-lan -j RETURN
+-A RRDIPT_INPUT -i eth1 -j RETURN
+-A RRDIPT_OUTPUT -o eth0 -j RETURN
+-A RRDIPT_OUTPUT -o br-lan -j RETURN
+-A RRDIPT_OUTPUT -o eth1 -j RETURN
+-A mwan3_connected -m set --match-set mwan3_connected dst -j MARK --set-xmark 0x3f00/0x3f00
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j CONNMARK --restore-mark --nfmask 0x3f00 --ctmask 0x3f00
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_ifaces_in
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_connected
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_rules
+-A mwan3_hook -j CONNMARK --save-mark --nfmask 0x3f00 --ctmask 0x3f00
+-A mwan3_hook -m mark ! --mark 0x3f00/0x3f00 -j mwan3_connected
+-A mwan3_policy_balanced -m mark --mark 0x0/0x3f00 -m comment --comment unreachable -j MARK --set-xmark 0x3e00/0x3f00
+-A mwan3_rules -m mark --mark 0x0/0x3f00 -j mwan3_policy_balanced
+-A openclash -p udp -m udp --dport 500 -j RETURN
+-A openclash -p udp -m udp --dport 68 -j RETURN
+-A openclash -m set --match-set localnetwork dst -j RETURN
+-A openclash -j MARK --set-xmark 0x162/0xffffffff
+-A openclash_dns_hijack -d 8.8.8.8/32 -m comment --comment "OpenClash Google DNS Hijack" -j MARK --set-xmark 0x162/0xffffffff
+-A openclash_dns_hijack -d 8.8.4.4/32 -m comment --comment "OpenClash Google DNS Hijack" -j MARK --set-xmark 0x162/0xffffffff
+-A openclash_output -p udp -m udp --sport 500 -j RETURN
+-A openclash_output -p udp -m udp --sport 68 -j RETURN
+-A openclash_output -m set --match-set localnetwork dst -j RETURN
+-A openclash_output -d 198.18.0.0/16 -p udp -m owner ! --uid-owner 65534 -j MARK --set-xmark 0x162/0xffffffff
+COMMIT
+# Completed on Tue Nov  2 05:22:31 2021
+
+#IPv6 NAT chain
+
+# Generated by ip6tables-save v1.8.7 on Tue Nov  2 05:22:31 2021
+*nat
+:PREROUTING ACCEPT [105:22464]
+:INPUT ACCEPT [103:22032]
+:OUTPUT ACCEPT [26053:2361182]
+:POSTROUTING ACCEPT [26053:2361182]
+COMMIT
+# Completed on Tue Nov  2 05:22:31 2021
+
+#IPv6 Mangle chain
+
+# Generated by ip6tables-save v1.8.7 on Tue Nov  2 05:22:31 2021
+*mangle
+:PREROUTING ACCEPT [6:636]
+:INPUT ACCEPT [6:636]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [6:636]
+:POSTROUTING ACCEPT [6:636]
+:RRDIPT_FORWARD - [0:0]
+:RRDIPT_INPUT - [0:0]
+:RRDIPT_OUTPUT - [0:0]
+:mwan3_connected - [0:0]
+:mwan3_hook - [0:0]
+:mwan3_ifaces_in - [0:0]
+:mwan3_policy_balanced - [0:0]
+:mwan3_rules - [0:0]
+-A PREROUTING -j mwan3_hook
+-A INPUT -j RRDIPT_INPUT
+-A FORWARD -j RRDIPT_FORWARD
+-A FORWARD -o wwan0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i wwan0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o usb0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i usb0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o eth2 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i eth2 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o eth1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i eth1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o usbnet0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i usbnet0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone wan MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tun1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone libernet MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tun1 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone libernet MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tun0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tun0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -o tap0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -i tap0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m comment --comment "!fw3: Zone xdermvpn MTU fixing" -j TCPMSS --clamp-mss-to-pmtu
+-A OUTPUT -j RRDIPT_OUTPUT
+-A OUTPUT -j mwan3_hook
+-A RRDIPT_FORWARD -s fe80::1/128 -j RETURN
+-A RRDIPT_FORWARD -d fe80::1/128 -j RETURN
+-A RRDIPT_FORWARD -s fe80::8ad5:cff:fe00:5fea/128 -j RETURN
+-A RRDIPT_FORWARD -d fe80::8ad5:cff:fe00:5fea/128 -j RETURN
+-A RRDIPT_FORWARD -s fe80::3c0c:8aff:fec5:81bb/128 -j RETURN
+-A RRDIPT_FORWARD -d fe80::3c0c:8aff:fec5:81bb/128 -j RETURN
+-A RRDIPT_FORWARD -s fe80::cd6:effa:15a0:32c6/128 -j RETURN
+-A RRDIPT_FORWARD -d fe80::cd6:effa:15a0:32c6/128 -j RETURN
+-A RRDIPT_FORWARD -s fe80::8ad5:cff:fe00:5fea/128 -j RETURN
+-A RRDIPT_FORWARD -s fe80::225e:f7ff:fe6d:f046/128 -j RETURN
+-A RRDIPT_FORWARD -d fe80::225e:f7ff:fe6d:f046/128 -j RETURN
+-A RRDIPT_INPUT -i eth0 -j RETURN
+-A RRDIPT_INPUT -i br-lan -j RETURN
+-A RRDIPT_INPUT -i eth1 -j RETURN
+-A RRDIPT_OUTPUT -o eth0 -j RETURN
+-A RRDIPT_OUTPUT -o br-lan -j RETURN
+-A RRDIPT_OUTPUT -o eth1 -j RETURN
+-A mwan3_connected -m set --match-set mwan3_connected dst -j MARK --set-xmark 0x3f00/0x3f00
+-A mwan3_hook -p ipv6-icmp -m icmp6 --icmpv6-type 133 -j RETURN
+-A mwan3_hook -p ipv6-icmp -m icmp6 --icmpv6-type 134 -j RETURN
+-A mwan3_hook -p ipv6-icmp -m icmp6 --icmpv6-type 135 -j RETURN
+-A mwan3_hook -p ipv6-icmp -m icmp6 --icmpv6-type 136 -j RETURN
+-A mwan3_hook -p ipv6-icmp -m icmp6 --icmpv6-type 137 -j RETURN
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j CONNMARK --restore-mark --nfmask 0x3f00 --ctmask 0x3f00
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_ifaces_in
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_connected
+-A mwan3_hook -m mark --mark 0x0/0x3f00 -j mwan3_rules
+-A mwan3_hook -j CONNMARK --save-mark --nfmask 0x3f00 --ctmask 0x3f00
+-A mwan3_hook -m mark ! --mark 0x3f00/0x3f00 -j mwan3_connected
+-A mwan3_policy_balanced -m mark --mark 0x0/0x3f00 -m comment --comment unreachable -j MARK --set-xmark 0x3e00/0x3f00
+-A mwan3_rules -m mark --mark 0x0/0x3f00 -j mwan3_policy_balanced
+COMMIT
+# Completed on Tue Nov  2 05:22:31 2021
+
+#===================== IPSET状态 =====================#
+
+Name: mwan3_dynamic_v4
+Name: mwan3_dynamic_v6
+Name: mwan3_custom_v4
+Name: mwan3_custom_v6
+Name: mwan3_connected_v4
+Name: adbyby_esc
+Name: mwan3_connected_v6
+Name: adbyby_wan
+Name: blockip
+Name: localnetwork
+Name: mwan3_connected
+
+#===================== 路由表状态 =====================#
+
+#route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.0.1     0.0.0.0         UG    0      0        0 eth1
+192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth1
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 br-lan
+198.18.0.0      0.0.0.0         255.255.0.0     U     0      0        0 utun
+#ip route list
+default via 192.168.0.1 dev eth1 proto static src 192.168.0.168 
+192.168.0.0/24 dev eth1 proto kernel scope link src 192.168.0.168 
+192.168.1.0/24 dev br-lan proto kernel scope link src 192.168.1.1 
+198.18.0.0/16 dev utun proto kernel scope link src 198.18.0.1 
+#ip rule show
+0:	from all lookup local
+219:	from all fwmark 0x162 lookup 354
+220:	from all lookup 220
+32766:	from all lookup main
+32767:	from all lookup default
+
+#===================== Tun设备状态 =====================#
+
+utun: tun
+
+#===================== 端口占用状态 =====================#
+
+tcp        0      0 198.18.0.1:7777         0.0.0.0:*               LISTEN      2060/clash
+tcp        0      0 :::7890                 :::*                    LISTEN      2060/clash
+tcp        0      0 :::7891                 :::*                    LISTEN      2060/clash
+tcp        0      0 :::7892                 :::*                    LISTEN      2060/clash
+tcp        0      0 :::7893                 :::*                    LISTEN      2060/clash
+tcp        0      0 :::7895                 :::*                    LISTEN      2060/clash
+tcp        0      0 :::9090                 :::*                    LISTEN      2060/clash
+udp        0      0 198.18.0.1:7777         0.0.0.0:*                           2060/clash
+udp        0      0 127.0.0.1:7874          0.0.0.0:*                           2060/clash
+udp        0      0 :::7891                 :::*                                2060/clash
+udp        0      0 :::7892                 :::*                                2060/clash
+udp        0      0 :::7893                 :::*                                2060/clash
+udp        0      0 :::7895                 :::*                                2060/clash
+
+#===================== 测试本机DNS查询 =====================#
+
+Server:		127.0.0.1
+Address:	127.0.0.1:53
+
+Name:	www.baidu.com
+Address: 198.18.0.63
+
+*** Can't find www.baidu.com: No answer
+
+
+#===================== resolv.conf.d =====================#
+
+# Interface 4g
+nameserver 192.168.0.1
+
+#===================== 测试本机网络连接 =====================#
+
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform
+Connection: keep-alive
+Content-Length: 277
+Content-Type: text/html
+Date: Mon, 01 Nov 2021 21:22:33 GMT
+Etag: "575e1f6f-115"
+Last-Modified: Mon, 13 Jun 2016 02:50:23 GMT
+Pragma: no-cache
+Server: bfe/1.0.8.18
+
+
+#===================== 测试本机网络下载 =====================#
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 80
+Cache-Control: max-age=300
+Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+Content-Type: text/plain; charset=utf-8
+ETag: "ade92b0bfd2951f6f2167a0db2526a0ba2121e8ae1a073846f6c9c10d3849c05"
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-XSS-Protection: 1; mode=block
+X-GitHub-Request-Id: 6CE8:2FA4:22AEE0:3AA0B5:617DB611
+Accept-Ranges: bytes
+Date: Mon, 01 Nov 2021 21:22:33 GMT
+Via: 1.1 varnish
+X-Served-By: cache-qpg1252-QPG
+X-Cache: HIT
+X-Cache-Hits: 1
+X-Timer: S1635801754.834168,VS0,VE0
+Vary: Authorization,Accept-Encoding,Origin
+Access-Control-Allow-Origin: *
+X-Fastly-Request-ID: 560091ef238844f38959f233a44db7b7f1fd678f
+Expires: Mon, 01 Nov 2021 21:27:33 GMT
+Source-Age: 256
+
+
+#===================== 最近运行日志 =====================#
+
+time="2021-11-02T05:17:18+08:00" level=info msg="[TCP] 192.168.1.4:51341 --> video-sin6-4.xx.fbcdn.net:443 using PLATINUM by Script"
+time="2021-11-02T05:17:19+08:00" level=info msg="[TCP] 192.168.1.4:50911 --> video-sin6-3.xx.fbcdn.net:443 using PLATINUM by Script"
+time="2021-11-02T05:17:34+08:00" level=info msg="[TCP] 192.168.1.11:47731 --> web.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:17:49+08:00" level=info msg="[TCP] 192.168.1.4:56216 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:17:49+08:00" level=info msg="[TCP] 192.168.1.4:56217 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:17:51+08:00" level=info msg="[TCP] 192.168.1.4:39889 --> connectivitycheck.gstatic.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:01+08:00" level=info msg="[TCP] 192.168.1.4:37616 --> video-sin6-2.xx.fbcdn.net:443 using PLATINUM by Script"
+Access-Control-Request-Method [GET]
+Access-Control-Request-Headers [authorization,content-type]
+Origin [http://192.168.1.1]
+User-Agent [Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.85 Safari/537.36]
+Referer [http://192.168.1.1/]
+Accept-Language [id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6,zh;q=0.5]
+Connection [keep-alive]
+Accept [*/*]
+Sec-Fetch-Mode [cors]
+Accept-Encoding [gzip, deflate]
+time="2021-11-02T05:18:22+08:00" level=info msg="[UDP] 192.168.1.11:54453 --> graph.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:23+08:00" level=info msg="[TCP] 192.168.1.11:44535 --> graph.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:28+08:00" level=info msg="[TCP] 192.168.1.11:39151 --> www.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:50+08:00" level=info msg="[TCP] 192.168.1.4:56220 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:50+08:00" level=info msg="[TCP] 192.168.1.4:56221 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:18:59+08:00" level=info msg="[UDP] 198.18.0.1:38966 --> 1.id.pool.ntp.org:123 using PLATINUM by Script"
+time="2021-11-02T05:19:00+08:00" level=info msg="[TCP] 192.168.1.11:41132 --> mtalk.google.com:5228 using PLATINUM by Script"
+time="2021-11-02T05:19:21+08:00" level=info msg="[TCP] 192.168.1.11:54086 --> clients2.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:23+08:00" level=info msg="[TCP] 192.168.1.11:47738 --> web.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:40+08:00" level=info msg="[TCP] 192.168.1.4:42198 --> android.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:42+08:00" level=info msg="[TCP] 198.18.0.1:48830 --> raw.githubusercontent.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:44+08:00" level=info msg="[UDP] 192.168.1.4:59772 --> i.ytimg.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:44+08:00" level=info msg="[UDP] 192.168.1.4:42170 --> youtubei.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:44+08:00" level=info msg="[TCP] 192.168.1.4:55334 --> youtubei.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:44+08:00" level=info msg="[TCP] 192.168.1.4:57665 --> i.ytimg.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:49+08:00" level=info msg="[TCP] 192.168.1.4:56234 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:49+08:00" level=info msg="[TCP] 192.168.1.4:56233 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:19:52+08:00" level=info msg="[UDP] 192.168.1.4:35615 --> i.ytimg.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:15+08:00" level=info msg="[TCP] 192.168.1.4:54577 --> graph.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:37+08:00" level=info msg="[TCP] 192.168.1.4:46190 --> www.instagram.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:48+08:00" level=info msg="[UDP] 192.168.1.4:41083 --> youtubei.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:49+08:00" level=info msg="[TCP] 192.168.1.4:56237 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:49+08:00" level=info msg="[TCP] 192.168.1.4:56238 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:56+08:00" level=info msg="[UDP] 192.168.1.4:53374 --> youtubei.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:20:56+08:00" level=info msg="[TCP] 192.168.1.4:55343 --> youtubei.googleapis.com:443 using PLATINUM by Script"
+time="2021-11-02T05:21:20+08:00" level=info msg="[TCP] 192.168.1.4:36929 --> www.speedtest.net:443 using PLATINUM by Script"
+time="2021-11-02T05:21:49+08:00" level=info msg="[TCP] 192.168.1.4:56243 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:21:49+08:00" level=info msg="[TCP] 192.168.1.4:56244 --> www.google.com:443 using PLATINUM by Script"
+time="2021-11-02T05:21:56+08:00" level=info msg="[TCP] 192.168.1.4:39620 --> www.youtube.com:443 using PLATINUM by Script"
+time="2021-11-02T05:22:31+08:00" level=info msg="[UDP] 192.168.1.11:58786 --> graph.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:22:31+08:00" level=info msg="[TCP] 192.168.1.11:44545 --> graph.facebook.com:443 using PLATINUM by Script"
+time="2021-11-02T05:22:31+08:00" level=info msg="[TCP] 198.18.0.1:51466 --> www.baidu.com:80 using PLATINUM by Script"
+time="2021-11-02T05:22:33+08:00" level=info msg="[TCP] 198.18.0.1:48968 --> raw.githubusercontent.com:443 using PLATINUM by Script"
+
+#===================== 活动连接信息 =====================#
+
+1. SourceIP:【192.168.1.11】 - Host:【edge-mqtt.facebook.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+2. SourceIP:【192.168.1.4】 - Host:【video-sin6-2.xx.fbcdn.net】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastershadowsocks】
+3. SourceIP:【192.168.1.4】 - Host:【www.speedtest.net】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+4. SourceIP:【192.168.1.4】 - Host:【android.googleapis.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+5. SourceIP:【192.168.1.4】 - Host:【i.ytimg.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+6. SourceIP:【192.168.1.4】 - Host:【alt3-mtalk.google.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+7. SourceIP:【192.168.1.4】 - Host:【snaptu-d.facebook.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+8. SourceIP:【192.168.1.11】 - Host:【graph.facebook.com】 - DestinationIP:【157.240.7.20】 - Network:【udp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+9. SourceIP:【192.168.1.4】 - Host:【mqtt-mini.facebook.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+10. SourceIP:【192.168.1.4】 - Host:【www.youtube.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastershadowsocks】
+11. SourceIP:【192.168.1.4】 - Host:【youtubei.googleapis.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+12. SourceIP:【192.168.1.11】 - Host:【mtalk.google.com】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+13. SourceIP:【192.168.1.4】 - Host:【video-sin6-4.xx.fbcdn.net】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastershadowsocks】
+14. SourceIP:【192.168.1.4】 - Host:【Empty】 - DestinationIP:【13.229.194.9】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastertrojan】
+15. SourceIP:【192.168.1.4】 - Host:【cbn.id】 - DestinationIP:【】 - Network:【tcp】 - RulePayload:【】 - Lastchain:【mastershadowsocks】
+
+```
